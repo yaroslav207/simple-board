@@ -19,6 +19,46 @@ const initCardRoute = ({ apiRouter, cardController }: Args): Router => {
 
   apiRouter.use(ApiPath.CARD, cardRouter);
 
+  /**
+   * @swagger
+   *
+   * /card/board/:boardId:
+   *    get:
+   *      tags: [Cards]
+   *      summary: get cards by board id
+   *      responses:
+   *        200:
+   *          description: all card by board id
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                    data:
+   *                      type: array
+   *                      items:
+   *                        $ref: '#/components/schemas/Card'
+   *                    totalCount:
+   *                      type: number
+   *                      example: 1
+   *        404:
+   *          description: board not found
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        403:
+   *          description: forbidden
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        500:
+   *          description: some server error
+   *
+   */
   cardRouter.get(
     CardApiPath.$BOARD_ID,
     checkAuthMiddleware(HttpMethod.GET),
@@ -30,6 +70,28 @@ const initCardRoute = ({ apiRouter, cardController }: Args): Router => {
     }),
   );
 
+  /**
+   * @swagger
+   *
+   * /card:
+   *    post:
+   *      tags: [Cards]
+   *      summary: create card
+   *      requestBody:
+   *        required: true
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/components/schemas/CreateCard'
+   *      responses:
+   *        201:
+   *          description: card created
+   *          content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/Card'
+   *
+   */
   cardRouter.post(
     CardApiPath.ROOT,
     checkAuthMiddleware(HttpMethod.POST),
@@ -41,6 +103,44 @@ const initCardRoute = ({ apiRouter, cardController }: Args): Router => {
     }),
   );
 
+
+  /**
+   * @swagger
+   *
+   * /card/:id:
+   *    patch:
+   *      tags: [Cards]
+   *      summary: update card
+   *      requestBody:
+   *        required: true
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/components/schemas/EditCard'
+   *      responses:
+   *        200:
+   *          description: card updated
+   *          content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/Card'
+   *        404:
+   *          description: card not found
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        403:
+   *          description: forbidden
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        500:
+   *          description: some server error
+   */
   cardRouter.patch(
     CardApiPath.$ID,
     checkAuthMiddleware(HttpMethod.PATCH),
@@ -52,6 +152,37 @@ const initCardRoute = ({ apiRouter, cardController }: Args): Router => {
     }),
   );
 
+  /**
+   * @swagger
+   *
+   * /card/:id:
+   *    get:
+   *      tags: [Cards]
+   *      summary: get card by id
+   *      responses:
+   *        200:
+   *          description: card by id
+   *          content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/Card'
+   *        404:
+   *          description: card not found
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        403:
+   *          description: forbidden
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        500:
+   *          description: some server error
+   */
   cardRouter.get(
     CardApiPath.$ID,
     checkAuthMiddleware(HttpMethod.GET),
@@ -62,6 +193,38 @@ const initCardRoute = ({ apiRouter, cardController }: Args): Router => {
     }),
   );
 
+  /**
+   * @swagger
+   *
+   * /card/:id:
+   *    delete:
+   *      tags: [Cards]
+   *      summary: delete card by id
+   *      responses:
+   *        200:
+   *          description: deleted
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        404:
+   *          description: card not found
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        403:
+   *          description: forbidden
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        500:
+   *          description: some server error
+   */
   cardRouter.delete(
     CardApiPath.$ID,
     checkAuthMiddleware(HttpMethod.DELETE),

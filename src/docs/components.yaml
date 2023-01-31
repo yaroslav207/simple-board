@@ -1,133 +1,243 @@
-   components:
-       schemas:
-         User:
-           type: object
-           required:
-             - email
-             - username
-             - createdAt
-             - updatedAt
-           properties:
-             id:
-               type: number
-               description: The auto-generated id of the user
-             email:
-               type: string
-               description: user email
-             username:
-               type: string
-               description: user name
-             createdAt:
-               type: string
-               description: create date
-             updatedAt:
-               type: string
-               description: update date
-           example:
-             id: 3
-             email: Jhon@gmail.com
-             name: Jhon
-             createdAt: 2023-01-18T00:03:48.000Z
-             updatedAt: 2023-01-18T00:03:48.000Z
-         Board:
-           type: object
-           required:
-             - title
-             - description
-             - userId
-             - createdAt
-             - updatedAt
-           properties:
-             id:
-               type: number
-               description: The auto-generated id of the board
-             title:
-               type: string
-               description: board title
-             description:
-               type: string
-               description: description board
-             userId:
-               type: number
-               description: id of the user who created the board
-             createdAt:
-               type: string
-               description: create date
-             updatedAt:
-               type: string
-               description: update date
-           example:
-             id: 3
-             userId: 1
-             title: some title
-             description: some description
-             createdAt: 2023-01-18T00:03:48.000Z
-             updatedAt: 2023-01-18T00:03:48.000Z
-         Column:
-           type: object
-           required:
-             - title
-             - description
-             - userId
-             - createdAt
-             - updatedAt
-           properties:
-             id:
-               type: number
-               description: The auto-generated id of the board
-             title:
-               type: string
-               description: board title
-             description:
-               type: string
-               description: description board
-             userId:
-               type: number
-               description: id of the user who created the board
-             createdAt:
-               type: string
-               description: create date
-             updatedAt:
-               type: string
-               description: update date
-           example:
-             id: 3
-             userId: 1
-             title: some title
-             description: some description
-             createdAt: 2023-01-18T00:03:48.000Z
-             updatedAt: 2023-01-18T00:03:48.000Z
-         Card:
-           type: object
-           required:
-             - title
-             - description
-             - userId
-             - createdAt
-             - updatedAt
-           properties:
-             id:
-               type: number
-               description: The auto-generated id of the board
-             title:
-               type: string
-               description: board title
-             description:
-               type: string
-               description: description board
-             userId:
-               type: number
-               description: id of the user who created the board
-             createdAt:
-               type: string
-               description: create date
-             updatedAt:
-               type: string
-               description: update date
-           example:
-             id: 3
-             userId: 1
-             title: some title
-             description: some description
-             createdAt: 2023-01-18T00:03:48.000Z
-             updatedAt: 2023-01-18T00:03:48.000Z
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - email
+        - username
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: number
+          description: The auto-generated id of the user
+        email:
+          type: string
+          description: user email
+        username:
+          type: string
+          description: user name
+        createdAt:
+          type: string
+          description: create date
+        updatedAt:
+          type: string
+          description: update date
+      example:
+        id: 3
+        email: Jhon@gmail.com
+        name: Jhon
+        createdAt: 2023-01-18T00:03:48.000Z
+        updatedAt: 2023-01-18T00:03:48.000Z
+    Board:
+      type: object
+      required:
+        - title
+        - description
+        - userId
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: number
+          description: The auto-generated id of the board
+        title:
+          type: string
+          description: board title
+        description:
+          type: string
+          description: description board
+        userId:
+          type: number
+          description: id of the user who created the board
+        createdAt:
+          type: string
+          description: create date
+        updatedAt:
+          type: string
+          description: update date
+      example:
+        id: 3
+        userId: 1
+        title: some title
+        description: some description
+        createdAt: 2023-01-18T00:03:48.000Z
+        updatedAt: 2023-01-18T00:03:48.000Z
+    Column:
+        type: object
+        required:
+          - title
+          - description
+          - userId
+          - createdAt
+          - updatedAt
+        properties:
+          id:
+            type: number
+            description: The auto-generated id of the column
+          title:
+            type: string
+            description: column title
+          description:
+            type: string
+            description: description column
+          boardId:
+            type: number
+            description: board id
+          userId:
+            type: number
+            description: id of the user who created the column
+          createdAt:
+            type: string
+            description: create date
+          updatedAt:
+            type: string
+            description: update date
+        example:
+          id: 3
+          userId: 1
+          title: some title
+          description: some description
+          createdAt: 2023-01-18T00:03:48.000Z
+          updatedAt: 2023-01-18T00:03:48.000Z
+    Card:
+      type: object
+      required:
+        - title
+        - description
+        - userId
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: number
+          description: The auto-generated id of the card
+        title:
+          type: string
+          description: card title
+        description:
+          type: string
+          description: description card
+        boardId:
+          type: number
+          description: board id
+        userId:
+          type: number
+          description: id of the user who created the card
+        createdAt:
+          type: string
+          description: create date
+        updatedAt:
+          type: string
+          description: update date
+      example:
+        id: 3
+        userId: 1
+        title: some title
+        description: some description
+        createdAt: 2023-01-18T00:03:48.000Z
+        updatedAt: 2023-01-18T00:03:48.000Z
+    CreateBoard:
+      type: object
+      required:
+        - title
+        - description
+      properties:
+        title:
+          type: string
+          description: board title
+        description:
+          type: string
+          description: description board
+      example:
+        title: some title
+        description: some description
+    CreateColumn:
+      type: object
+      required:
+        - title
+        - boardId
+      properties:
+        title:
+          type: string
+          description: column title
+        description:
+          type: string
+          description: description column
+        boardId:
+          type: number
+          description: board id
+        order:
+          type: number
+          description: order in board
+      example:
+        title: some title
+        description: some description
+        boardId: 2
+        order: 1
+    CreateCard:
+      type: object
+      required:
+        - title
+        - boardId
+        - columnId
+        - order
+      properties:
+        title:
+          type: string
+          description: card title
+        description:
+          type: string
+          description: description card
+        boardId:
+          type: number
+          description: board id
+        columnId:
+          type: number
+          description: column id
+        order:
+          type: number
+          description: order in columns
+      example:
+        title: some title
+        description: some description
+        boardId: 2
+        cardId: 2
+        order: 1
+    EditColumn:
+      type: object
+      properties:
+        title:
+          type: string
+          description: column title
+        description:
+          type: string
+          description: description column
+        order:
+          type: number
+          description: order in board
+      example:
+        title: some title
+        description: some description
+        boardId: 2
+        order: 1
+    EditCard:
+      type: object
+      properties:
+        title:
+          type: string
+          description: card title
+        description:
+          type: string
+          description: description card
+        columnId:
+          type: number
+          description: column id
+        order:
+          type: number
+          description: order in columns
+      example:
+        title: some title
+        description: some description
+        cardId: 2
+        order: 1

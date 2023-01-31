@@ -19,6 +19,46 @@ const initColumnRoute = ({ apiRouter, columnController }: Args): Router => {
 
   apiRouter.use(ApiPath.COLUMN, columnRouter);
 
+  /**
+   * @swagger
+   *
+   * /column/board/:boardId:
+   *    get:
+   *      tags: [Columns]
+   *      summary: get columns by board id
+   *      responses:
+   *        200:
+   *          description: all columns by board id
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                    data:
+   *                      type: array
+   *                      items:
+   *                        $ref: '#/components/schemas/Column'
+   *                    totalCount:
+   *                      type: number
+   *                      example: 1
+   *        404:
+   *          description: board not found
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        403:
+   *          description: forbidden
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        500:
+   *          description: some server error
+   *
+   */
   columnRouter.get(
     ColumnApiPath.$BOARD_ID,
     checkAuthMiddleware(HttpMethod.GET),
@@ -29,6 +69,30 @@ const initColumnRoute = ({ apiRouter, columnController }: Args): Router => {
     }),
   );
 
+  /**
+   * @swagger
+   *
+   * /column:
+   *    post:
+   *      tags: [Columns]
+   *      summary: create column
+   *      requestBody:
+   *        required: true
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/components/schemas/CreateColumn'
+   *      responses:
+   *        201:
+   *          description: column created
+   *          content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/Column'
+   *        500:
+   *          description: some server error
+   *
+   */
   columnRouter.post(
     ColumnApiPath.ROOT,
     checkAuthMiddleware(HttpMethod.POST),
@@ -40,6 +104,43 @@ const initColumnRoute = ({ apiRouter, columnController }: Args): Router => {
     }),
   );
 
+  /**
+   * @swagger
+   *
+   * /column/:id:
+   *    patch:
+   *      tags: [Columns]
+   *      summary: update column
+   *      requestBody:
+   *        required: true
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/components/schemas/EditColumn'
+   *      responses:
+   *        200:
+   *          description: card updated
+   *          content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/Card'
+   *        404:
+   *          description: column not found
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        403:
+   *          description: forbidden
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        500:
+   *          description: some server error
+   */
   columnRouter.patch(
     ColumnApiPath.$ID,
     checkAuthMiddleware(HttpMethod.PATCH),
@@ -51,6 +152,38 @@ const initColumnRoute = ({ apiRouter, columnController }: Args): Router => {
     }),
   );
 
+  /**
+   * @swagger
+   *
+   * /column/:id:
+   *    delete:
+   *      tags: [Columns]
+   *      summary: delete column by id
+   *      responses:
+   *        200:
+   *          description: deleted
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        404:
+   *          description: column not found
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        403:
+   *          description: forbidden
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        500:
+   *          description: some server error
+   */
   columnRouter.delete(
     ColumnApiPath.$ID,
     checkAuthMiddleware(HttpMethod.DELETE),

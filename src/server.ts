@@ -7,12 +7,11 @@ import passport from "passport";
 import swaggerUI from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
 
-import { passport as passportController } from '@/controllers';
+import {passport as passportController} from '@/controllers';
 import {
   identifyUser as identifyUserMiddleware,
   handleError as handleErrorMiddleware,
 } from "@/middlewares";
-import path from "path";
 
 const app = express();
 
@@ -24,27 +23,39 @@ app.use(identifyUserMiddleware);
 
 const optionSwagger: swaggerJSDoc.OAS3Options = {
   failOnErrors: true,
-  definition: {
-    openapi: "3.0.0",
+  swaggerDefinition: {
+    openapi: '3.0.0',
     info: {
-      title: "Api doc",
-      version: "1.0.0",
-      description: "Board apis"
+      title: 'Boards API',
+      version: '1.0.0',
+      description: 'Simple boards api'
     },
+    host: 'localhost:3001',
     servers: [
       {
-        url: "http://localhost:3001"
+        url: 'http://localhost:3001/api/v1',
       }
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        }
+      }
+    },
+    security: [{
+      bearerAuth: []
+    }]
   },
   apis: [
     './src/docs/*.yaml',
+    './src/routes/**/*.ts'
   ]
 }
 
 const spec = swaggerJSDoc(optionSwagger)
-
-console.log(spec)
 
 app.use("/swagger", swaggerUI.serve, swaggerUI.setup(spec))
 

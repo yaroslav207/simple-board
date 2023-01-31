@@ -20,6 +20,29 @@ const initBoardRoute = ({ apiRouter, boardController }: Args): Router => {
   apiRouter.use(ApiPath.BOARD, boardRouter);
 
   boardRouter.get(
+    /**
+     * @swagger
+     *
+     * /board:
+     *    get:
+     *      tags: [Boards]
+     *      summary: get all boards of an authorized user
+     *      responses:
+     *        200:
+     *          description: all boards of an authorized user
+     *          content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                    data:
+     *                      type: array
+     *                      items:
+     *                        $ref: '#/components/schemas/Board'
+     *                    totalCount:
+     *                      type: number
+     *                      example: 1
+     */
     BoardApiPath.ROOT,
     checkAuthMiddleware(HttpMethod.GET),
     handleAsyncApi(async (req, res) => {
@@ -33,6 +56,27 @@ const initBoardRoute = ({ apiRouter, boardController }: Args): Router => {
     }),
   );
 
+  /**
+   * @swagger
+   *
+   * /board:
+   *    post:
+   *      tags: [Boards]
+   *      summary: create board
+   *      requestBody:
+   *        required: true
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/components/schemas/CreateBoard'
+   *      responses:
+   *        201:
+   *          description: board created
+   *          content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/Board'
+   */
   boardRouter.post(
     BoardApiPath.ROOT,
     checkAuthMiddleware(HttpMethod.POST),
@@ -44,6 +88,38 @@ const initBoardRoute = ({ apiRouter, boardController }: Args): Router => {
     }),
   );
 
+  /**
+   * @swagger
+   *
+   * /board/:id:
+   *    get:
+   *      tags: [Boards]
+   *      summary: get board by id
+   *      responses:
+   *        200:
+   *          description: board by id
+   *          content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/Board'
+   *        404:
+   *          description: board not found
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        403:
+   *          description: forbidden
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        500:
+   *          description: some server error
+   *
+   */
   boardRouter.get(
     BoardApiPath.$ID,
     checkAuthMiddleware(HttpMethod.GET),
@@ -55,6 +131,39 @@ const initBoardRoute = ({ apiRouter, boardController }: Args): Router => {
     }),
   );
 
+  /**
+   * @swagger
+   *
+   * /board/:id:
+   *    delete:
+   *      tags: [Boards]
+   *      summary: get board by id
+   *      responses:
+   *        200:
+   *          description: deleted
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        404:
+   *          description: board not found
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        403:
+   *          description: forbidden
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   *        500:
+   *          description: some server error
+   *
+   */
   boardRouter.delete(
     BoardApiPath.$ID,
     checkAuthMiddleware(HttpMethod.DELETE),
@@ -62,7 +171,9 @@ const initBoardRoute = ({ apiRouter, boardController }: Args): Router => {
     handleAsyncApi(async (req, res) => {
       await boardController.delete(Number(req.params.id));
 
-      res.send('Deleted').status(HttpCode.OK);
+      res.json({
+        message: 'Deleted'
+      }).status(HttpCode.OK);
     }),
   );
 

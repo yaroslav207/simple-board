@@ -23,29 +23,42 @@ const initAuthRoute = ({ apiRouter, authController }: Args): Router => {
   /**
    * @swagger
    *
-   * components:
-   *  schemas:
-   *    User:
-   *      type: object
-   *      required:
-   *        - email
-   *      properties
-   *        id:
-   *          type: string
-   *          description: The auto-generated id of the user
-   *        email:
-   *          type: string
-   *          description: The auto-generated id of the user
-   *        username:
-   *          type: string
-   *          description: The auto-generated id of the user
-   *        createdAt:
-   *          type: date
-   *          description: date
-   *        updatedAt:
-   *          type: date
-   *          description: date
-   *
+   * /auth/sign-in:
+   *    post:
+   *      summary: sign in user
+   *      tags: [Authorization]
+   *      requestBody:
+   *        required: true
+   *        content:
+   *          application/json:
+   *            schema:
+   *              type: object
+   *              required:
+   *                - email
+   *                - password
+   *              properties:
+   *                email:
+   *                  type: string
+   *                  description: user email
+   *                password:
+   *                  type: string
+   *                  description: user password
+   *              example:
+   *                email: user1@gmail.com
+   *                password: 1234567
+   *      responses:
+   *        200:
+   *          description: user data and authorization token
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  user:
+   *                    $ref: '#/components/schemas/User'
+   *                  token:
+   *                    type: string
+   *                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTY3NDQyNTUwMH0.r0f4rB57QK8QQjFC3MdsJZG8iVYqTHsnr4JuBHpwaOQ
    */
   userRouter.post(
     AuthApiPath.SIGN_IN,
