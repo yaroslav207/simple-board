@@ -1,0 +1,12 @@
+.build
+.vscode
+build
+web_modules
+node_modules
+dist
+cypress.env.json
+jsconfig.json
+phpstorm.config.js
+.DS_Store
+gflows
+.idea

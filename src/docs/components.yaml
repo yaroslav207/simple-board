@@ -1,0 +1,133 @@
+   components:
+       schemas:
+         User:
+           type: object
+           required:
+             - email
+             - username
+             - createdAt
+             - updatedAt
+           properties:
+             id:
+               type: number
+               description: The auto-generated id of the user
+             email:
+               type: string
+               description: user email
+             username:
+               type: string
+               description: user name
+             createdAt:
+               type: string
+               description: create date
+             updatedAt:
+               type: string
+               description: update date
+           example:
+             id: 3
+             email: Jhon@gmail.com
+             name: Jhon
+             createdAt: 2023-01-18T00:03:48.000Z
+             updatedAt: 2023-01-18T00:03:48.000Z
+         Board:
+           type: object
+           required:
+             - title
+             - description
+             - userId
+             - createdAt
+             - updatedAt
+           properties:
+             id:
+               type: number
+               description: The auto-generated id of the board
+             title:
+               type: string
+               description: board title
+             description:
+               type: string
+               description: description board
+             userId:
+               type: number
+               description: id of the user who created the board
+             createdAt:
+               type: string
+               description: create date
+             updatedAt:
+               type: string
+               description: update date
+           example:
+             id: 3
+             userId: 1
+             title: some title
+             description: some description
+             createdAt: 2023-01-18T00:03:48.000Z
+             updatedAt: 2023-01-18T00:03:48.000Z
+         Column:
+           type: object
+           required:
+             - title
+             - description
+             - userId
+             - createdAt
+             - updatedAt
+           properties:
+             id:
+               type: number
+               description: The auto-generated id of the board
+             title:
+               type: string
+               description: board title
+             description:
+               type: string
+               description: description board
+             userId:
+               type: number
+               description: id of the user who created the board
+             createdAt:
+               type: string
+               description: create date
+             updatedAt:
+               type: string
+               description: update date
+           example:
+             id: 3
+             userId: 1
+             title: some title
+             description: some description
+             createdAt: 2023-01-18T00:03:48.000Z
+             updatedAt: 2023-01-18T00:03:48.000Z
+         Card:
+           type: object
+           required:
+             - title
+             - description
+             - userId
+             - createdAt
+             - updatedAt
+           properties:
+             id:
+               type: number
+               description: The auto-generated id of the board
+             title:
+               type: string
+               description: board title
+             description:
+               type: string
+               description: description board
+             userId:
+               type: number
+               description: id of the user who created the board
+             createdAt:
+               type: string
+               description: create date
+             updatedAt:
+               type: string
+               description: update date
+           example:
+             id: 3
+             userId: 1
+             title: some title
+             description: some description
+             createdAt: 2023-01-18T00:03:48.000Z
+             updatedAt: 2023-01-18T00:03:48.000Z
