@@ -10,7 +10,6 @@ enum ErrorMessage {
   COLUMN_NOT_FOUND = 'Column not found',
   CARD_NOT_FOUND = 'Card not found',
   FORBIDDEN = 'Forbidden',
-
 }
 
 export { ErrorMessage };

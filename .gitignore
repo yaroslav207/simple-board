@@ -10,3 +10,4 @@ phpstorm.config.js
 .DS_Store
 gflows
 .idea
+.env

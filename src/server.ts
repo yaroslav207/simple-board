@@ -9,17 +9,12 @@ import swaggerJSDoc from "swagger-jsdoc";
 
 import {passport as passportController} from '@/controllers';
 import {
-  identifyUser as identifyUserMiddleware,
   handleError as handleErrorMiddleware,
+  checkAuth as checkAuthMiddleware,
 } from "@/middlewares";
+import {DocPath} from "@/common/enums/api";
 
 const app = express();
-
-app.use(json({limit: '100mb'}));
-app.use(urlencoded({extended: true, limit: '100mb'}));
-app.use(passport.initialize());
-passportController.init(passport)
-app.use(identifyUserMiddleware);
 
 const optionSwagger: swaggerJSDoc.OAS3Options = {
   failOnErrors: true,
@@ -57,7 +52,13 @@ const optionSwagger: swaggerJSDoc.OAS3Options = {
 
 const spec = swaggerJSDoc(optionSwagger)
 
-app.use("/swagger", swaggerUI.serve, swaggerUI.setup(spec))
+app.use(DocPath.SWAGGER, swaggerUI.serve, swaggerUI.setup(spec))
+
+app.use(json({limit: '100mb'}));
+app.use(urlencoded({extended: true, limit: '100mb'}));
+app.use(passport.initialize());
+passportController.init(passport)
+app.use(checkAuthMiddleware);
 
 initApi(app);
 

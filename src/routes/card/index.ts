@@ -1,13 +1,16 @@
 import {Router} from 'express';
-import {ApiPath, CardApiPath, HttpCode, HttpMethod} from '@/common/enums';
+import {ApiPath, CardApiPath, HttpCode, RouterParam} from '@/common/enums';
 import {handleAsyncApi} from '@/helpers';
 import {card as cardC} from '@/controllers';
 import {
-  checkAuth as checkAuthMiddleware, checkHasPermitBoard,
+  checkHasPermitBoard, checkHasPermitCard, checkHasPermitCreateCard,
   validateSchema as validateSchemaMiddleware,
 } from '@/middlewares';
 import {User} from "@/common/types";
 import {createCard as createCardValidationSchema, updateCard as updateCardValidationSchema} from "@/validation-schemas";
+import {
+  checkParamsNumberIsValid
+} from "@/middlewares/check-params-number-is-valid/check-params-number-is-valid.middleware";
 
 type Args = {
   apiRouter: Router;
@@ -26,6 +29,12 @@ const initCardRoute = ({ apiRouter, cardController }: Args): Router => {
    *    get:
    *      tags: [Cards]
    *      summary: get cards by board id
+   *      parameters:
+   *         - in: path
+   *           name: boardId
+   *           type: integer
+   *           required: true
+   *           description: Numeric ID of the board.
    *      responses:
    *        200:
    *          description: all card by board id
@@ -61,8 +70,8 @@ const initCardRoute = ({ apiRouter, cardController }: Args): Router => {
    */
   cardRouter.get(
     CardApiPath.$BOARD_ID,
-    checkAuthMiddleware(HttpMethod.GET),
-    checkHasPermitBoard('boardId'),
+    checkParamsNumberIsValid(RouterParam.BOARD_ID),
+    checkHasPermitBoard(RouterParam.BOARD_ID),
     handleAsyncApi(async (req, res) => {
       const result = await cardController.getByBoardId(Number(req.params.boardId));
 
@@ -94,7 +103,7 @@ const initCardRoute = ({ apiRouter, cardController }: Args): Router => {
    */
   cardRouter.post(
     CardApiPath.ROOT,
-    checkAuthMiddleware(HttpMethod.POST),
+    checkHasPermitCreateCard,
     validateSchemaMiddleware(createCardValidationSchema),
     handleAsyncApi(async (req, res) => {
       const card = await cardController.create({ ...req.body, userId: (<User>req.user).id });
@@ -111,6 +120,12 @@ const initCardRoute = ({ apiRouter, cardController }: Args): Router => {
    *    patch:
    *      tags: [Cards]
    *      summary: update card
+   *      parameters:
+   *         - in: path
+   *           name: id
+   *           type: integer
+   *           required: true
+   *           description: Numeric ID of the card.
    *      requestBody:
    *        required: true
    *        content:
@@ -143,7 +158,8 @@ const initCardRoute = ({ apiRouter, cardController }: Args): Router => {
    */
   cardRouter.patch(
     CardApiPath.$ID,
-    checkAuthMiddleware(HttpMethod.PATCH),
+    checkParamsNumberIsValid(RouterParam.ID),
+    checkHasPermitCard(),
     validateSchemaMiddleware(updateCardValidationSchema),
     handleAsyncApi(async (req, res) => {
       const card = await cardController.update(Number(req.params.id), req.body);
@@ -159,6 +175,12 @@ const initCardRoute = ({ apiRouter, cardController }: Args): Router => {
    *    get:
    *      tags: [Cards]
    *      summary: get card by id
+   *      parameters:
+   *         - in: path
+   *           name: id
+   *           type: integer
+   *           required: true
+   *           description: Numeric ID of the card.
    *      responses:
    *        200:
    *          description: card by id
@@ -185,7 +207,8 @@ const initCardRoute = ({ apiRouter, cardController }: Args): Router => {
    */
   cardRouter.get(
     CardApiPath.$ID,
-    checkAuthMiddleware(HttpMethod.GET),
+    checkParamsNumberIsValid(RouterParam.ID),
+    checkHasPermitCard(),
     handleAsyncApi(async (req, res) => {
       const card = await cardController.getById(Number(req.params.id));
 
@@ -200,6 +223,12 @@ const initCardRoute = ({ apiRouter, cardController }: Args): Router => {
    *    delete:
    *      tags: [Cards]
    *      summary: delete card by id
+   *      parameters:
+   *         - in: path
+   *           name: id
+   *           type: integer
+   *           required: true
+   *           description: Numeric ID of the card.
    *      responses:
    *        200:
    *          description: deleted
@@ -227,7 +256,7 @@ const initCardRoute = ({ apiRouter, cardController }: Args): Router => {
    */
   cardRouter.delete(
     CardApiPath.$ID,
-    checkAuthMiddleware(HttpMethod.DELETE),
+    checkHasPermitCard(),
     handleAsyncApi(async (req, res) => {
       await cardController.delete(Number(req.params.id));
 

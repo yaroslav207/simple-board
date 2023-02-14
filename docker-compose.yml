@@ -1,0 +1,44 @@
+services:
+  mysqldb2:
+    image: mysql:8.0.31
+    container_name: mysqlcontainer2
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    volumes:
+      - ./dbinit/init.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - $HOME/database:/var/lib/mysql
+    ports:
+      - 3308:3308
+    expose:
+      - 3308
+    environment:
+      MYSQL_DATABASE: boards
+      MYSQL_ROOT_PASSWORD: 87654321
+      MYSQL_TCP_PORT: 3308
+    networks:
+      - internalnetis
+
+  nodeapp:
+    container_name: boardappcontainer
+    build: .
+    volumes:
+      - $HOME/nodeapp:/code
+    ports:
+      - 3001:3001
+    expose:
+      - "3001"
+    environment:
+      DB_HOST: mysqldb2
+      DB_PORT: 3308
+      DB_USERNAME: 'root'
+      DB_PASSWORD: '87654321'
+      DB_NAME: boards
+      SERVER_PORT: 3001
+    depends_on:
+      - mysqldb2
+    networks:
+      - internalnetis
+
+networks:
+  internalnetis:
+    driver: bridge

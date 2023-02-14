@@ -10,7 +10,7 @@ module.exports = {
         primaryKey: true,
       },
       title: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         require: true,
       },
       userId: {
@@ -52,7 +52,7 @@ module.exports = {
     })
   },
 
-  async down (queryInterface, Sequelize) {
+  async down (queryInterface) {
     await queryInterface.dropTable('cards');
   }
 };

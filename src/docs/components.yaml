@@ -67,8 +67,8 @@ components:
         type: object
         required:
           - title
-          - description
           - userId
+          - boardId
           - createdAt
           - updatedAt
         properties:
@@ -96,16 +96,17 @@ components:
         example:
           id: 3
           userId: 1
+          boardId: 1
           title: some title
-          description: some description
           createdAt: 2023-01-18T00:03:48.000Z
           updatedAt: 2023-01-18T00:03:48.000Z
     Card:
       type: object
       required:
         - title
-        - description
         - userId
+        - boardId
+        - columnId
         - createdAt
         - updatedAt
       properties:
@@ -115,15 +116,18 @@ components:
         title:
           type: string
           description: card title
-        description:
-          type: string
-          description: description card
         boardId:
           type: number
           description: board id
+        columnId:
+          type: number
+          description: column id
         userId:
           type: number
           description: id of the user who created the card
+        order:
+          type: number
+          description: order in column
         createdAt:
           type: string
           description: create date
@@ -134,7 +138,9 @@ components:
         id: 3
         userId: 1
         title: some title
-        description: some description
+        columnId: 1
+        boardId: 2
+        order: 1
         createdAt: 2023-01-18T00:03:48.000Z
         updatedAt: 2023-01-18T00:03:48.000Z
     CreateBoard:
@@ -157,13 +163,11 @@ components:
       required:
         - title
         - boardId
+        - order
       properties:
         title:
           type: string
           description: column title
-        description:
-          type: string
-          description: description column
         boardId:
           type: number
           description: board id
@@ -172,7 +176,6 @@ components:
           description: order in board
       example:
         title: some title
-        description: some description
         boardId: 2
         order: 1
     CreateCard:
@@ -186,9 +189,6 @@ components:
         title:
           type: string
           description: card title
-        description:
-          type: string
-          description: description card
         boardId:
           type: number
           description: board id
@@ -199,10 +199,9 @@ components:
           type: number
           description: order in columns
       example:
-        title: some title
-        description: some description
+        title: new title
         boardId: 2
-        cardId: 2
+        columnId: 2
         order: 1
     EditColumn:
       type: object
@@ -210,16 +209,11 @@ components:
         title:
           type: string
           description: column title
-        description:
-          type: string
-          description: description column
         order:
           type: number
           description: order in board
       example:
-        title: some title
-        description: some description
-        boardId: 2
+        title: new title
         order: 1
     EditCard:
       type: object
@@ -227,9 +221,6 @@ components:
         title:
           type: string
           description: card title
-        description:
-          type: string
-          description: description card
         columnId:
           type: number
           description: column id
@@ -237,7 +228,6 @@ components:
           type: number
           description: order in columns
       example:
-        title: some title
-        description: some description
-        cardId: 2
+        title: new title
+        columnId: 2
         order: 1

@@ -45,7 +45,7 @@ const initAuthRoute = ({ apiRouter, authController }: Args): Router => {
    *                  description: user password
    *              example:
    *                email: user1@gmail.com
-   *                password: 1234567
+   *                password: "123456"
    *      responses:
    *        200:
    *          description: user data and authorization token
@@ -62,9 +62,10 @@ const initAuthRoute = ({ apiRouter, authController }: Args): Router => {
    */
   userRouter.post(
     AuthApiPath.SIGN_IN,
-    authenticationMiddleware,
     validateSchemaMiddleware(signInValidationSchema),
+    authenticationMiddleware,
     handleAsyncApi(async (req, res) => {
+      console.log(req.body)
       const user = await authController.signIn(req.body);
 
       res.json(user).status(HttpCode.OK);

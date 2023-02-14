@@ -1,0 +1,7 @@
+.build
+.vscode
+build
+node_modules
+.idea
+Dockerfile
+.git

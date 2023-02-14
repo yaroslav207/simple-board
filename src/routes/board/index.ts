@@ -1,13 +1,13 @@
 import {Router} from 'express';
-import {ApiPath, BoardApiPath, HttpCode, HttpMethod} from '@/common/enums';
+import {ApiPath, BoardApiPath, HttpCode, RouterParam} from '@/common/enums';
 import {handleAsyncApi} from '@/helpers';
 import {board as boardC} from '@/controllers';
-import {
-  checkAuth as checkAuthMiddleware, checkHasPermitBoard,
-  validateSchema as validateSchemaMiddleware,
-} from '@/middlewares';
+import {checkHasPermitBoard, validateSchema as validateSchemaMiddleware,} from '@/middlewares';
 import {BoardLoadFilter, User} from "@/common/types";
 import {createBoard as createBoardValidationSchema} from "@/validation-schemas";
+import {
+  checkParamsNumberIsValid
+} from "@/middlewares/check-params-number-is-valid/check-params-number-is-valid.middleware";
 
 type Args = {
   apiRouter: Router;
@@ -19,32 +19,47 @@ const initBoardRoute = ({ apiRouter, boardController }: Args): Router => {
 
   apiRouter.use(ApiPath.BOARD, boardRouter);
 
+  /**
+   * @swagger
+   *
+   * /board:
+   *    get:
+   *      tags: [Boards]
+   *      summary: get all boards of an authorized user
+   *      parameters:
+   *         - in: query
+   *           name: offset
+   *           type: integer
+   *           description: The number of items to skip before starting to collect the result set.
+   *         - in: query
+   *           name: limit
+   *           type: integer
+   *           description: The numbers of items to return.
+   *      responses:
+   *        200:
+   *          description: all boards of an authorized user
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                    data:
+   *                      type: array
+   *                      items:
+   *                        $ref: '#/components/schemas/Board'
+   *                    totalCount:
+   *                      type: number
+   *                      example: 1
+   *        401:
+   *          description: unauthorized
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
+   */
   boardRouter.get(
-    /**
-     * @swagger
-     *
-     * /board:
-     *    get:
-     *      tags: [Boards]
-     *      summary: get all boards of an authorized user
-     *      responses:
-     *        200:
-     *          description: all boards of an authorized user
-     *          content:
-     *            application/json:
-     *              schema:
-     *                type: object
-     *                properties:
-     *                    data:
-     *                      type: array
-     *                      items:
-     *                        $ref: '#/components/schemas/Board'
-     *                    totalCount:
-     *                      type: number
-     *                      example: 1
-     */
     BoardApiPath.ROOT,
-    checkAuthMiddleware(HttpMethod.GET),
     handleAsyncApi(async (req, res) => {
       const result = await boardController.getByQuery({
         limit: Number(req.query.limit),
@@ -76,10 +91,16 @@ const initBoardRoute = ({ apiRouter, boardController }: Args): Router => {
    *            application/json:
    *              schema:
    *                $ref: '#/components/schemas/Board'
+   *        401:
+   *          description: unauthorized
+   *          content:
+   *            application/json:
+   *              schema:
+   *                message:
+   *                  type: string
    */
   boardRouter.post(
     BoardApiPath.ROOT,
-    checkAuthMiddleware(HttpMethod.POST),
     validateSchemaMiddleware(createBoardValidationSchema),
     handleAsyncApi(async (req, res) => {
       const board = await boardController.create({ ...req.body, userId: (<User>req.user).id });
@@ -95,6 +116,12 @@ const initBoardRoute = ({ apiRouter, boardController }: Args): Router => {
    *    get:
    *      tags: [Boards]
    *      summary: get board by id
+   *      parameters:
+   *         - in: path
+   *           name: id
+   *           type: integer
+   *           required: true
+   *           description: Numeric ID of the board.
    *      responses:
    *        200:
    *          description: board by id
@@ -122,7 +149,7 @@ const initBoardRoute = ({ apiRouter, boardController }: Args): Router => {
    */
   boardRouter.get(
     BoardApiPath.$ID,
-    checkAuthMiddleware(HttpMethod.GET),
+    checkParamsNumberIsValid(RouterParam.ID),
     checkHasPermitBoard(),
     handleAsyncApi(async (req, res) => {
       const board = await boardController.getById(Number(req.params.id));
@@ -138,6 +165,12 @@ const initBoardRoute = ({ apiRouter, boardController }: Args): Router => {
    *    delete:
    *      tags: [Boards]
    *      summary: get board by id
+   *      parameters:
+   *         - in: path
+   *           name: id
+   *           type: integer
+   *           required: true
+   *           description: Numeric ID of the board.
    *      responses:
    *        200:
    *          description: deleted
@@ -166,7 +199,7 @@ const initBoardRoute = ({ apiRouter, boardController }: Args): Router => {
    */
   boardRouter.delete(
     BoardApiPath.$ID,
-    checkAuthMiddleware(HttpMethod.DELETE),
+    checkParamsNumberIsValid(RouterParam.ID),
     checkHasPermitBoard(),
     handleAsyncApi(async (req, res) => {
       await boardController.delete(Number(req.params.id));

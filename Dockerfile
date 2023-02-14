@@ -1,6 +1,6 @@
-FROM node:12.13-alpine
+FROM node:16.16.0
 
-WORKDIR /app
+WORKDIR /board-app
 
 COPY package*.json ./
 
@@ -8,6 +8,4 @@ RUN npm install
 
 COPY . .
 
-COPY ./dist ./dist
-
-CMD ["npm", "run", "start:dev"]
+CMD ["npm", "run", "pre-start"]

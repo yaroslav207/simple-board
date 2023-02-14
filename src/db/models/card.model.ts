@@ -21,7 +21,7 @@ export class Card extends Model {
 
   @ForeignKey(() => User)
   @SequelizeColumn({
-    type: DataType.NUMBER,
+    type: DataType.INTEGER,
     allowNull: false,
   })
   userId!: number;
@@ -31,7 +31,7 @@ export class Card extends Model {
 
   @ForeignKey(() => Board)
   @SequelizeColumn({
-    type: DataType.NUMBER,
+    type: DataType.INTEGER,
     allowNull: false,
   })
   boardId!: number;
@@ -41,7 +41,7 @@ export class Card extends Model {
 
   @ForeignKey(() => Column)
   @SequelizeColumn({
-    type: DataType.NUMBER,
+    type: DataType.INTEGER,
     allowNull: false,
   })
   columnId!: number;

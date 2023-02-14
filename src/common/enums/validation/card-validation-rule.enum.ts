@@ -1,5 +1,5 @@
 enum CardValidationRule {
-  TITLE_MIN_LENGTH = 3,
+  TITLE_MIN_LENGTH = 1,
   TITLE_MAX_LENGTH = 2000,
 }
 

@@ -1,19 +1,18 @@
 import { Response, Request, NextFunction, RequestHandler } from 'express';
 import { jwt as jwtMiddleWare } from '../jwt';
-import { HttpMethod } from '@/common/enums';
+import {PUBLIC_ROUTES} from "@/common/constants/app";
 
-const checkAuth = (...methods: HttpMethod[]): RequestHandler => {
-  const handler: RequestHandler = (
+const checkAuth: RequestHandler = (
     req: Request,
     res: Response,
     next: NextFunction,
   ): void => {
-    methods.some((method) => method === req.method)
+    const isPublicRoute = PUBLIC_ROUTES.some(route =>
+      route.path === req.path && (!route.method || route.method === req.method))
+
+    !isPublicRoute
       ? jwtMiddleWare(req, res, next)
       : next();
-  };
-
-  return handler;
 };
 
 export { checkAuth };

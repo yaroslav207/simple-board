@@ -28,7 +28,7 @@ export class Board extends Model {
 
   @ForeignKey(() => User)
   @Column({
-    type: DataType.NUMBER,
+    type: DataType.INTEGER,
     allowNull: false,
   })
   userId!: number;

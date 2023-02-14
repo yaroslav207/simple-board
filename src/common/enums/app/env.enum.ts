@@ -23,7 +23,7 @@ const ENV = {
     SECRET: SECRET_KEY,
   },
   API: {
-    V1_PREFIX: '/api/v1/',
+    V1_PREFIX: '/api/v1',
   },
   DB: {
     NAME: DB_NAME,

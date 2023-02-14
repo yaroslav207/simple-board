@@ -1,13 +1,18 @@
 import {Router} from 'express';
-import {ApiPath, ColumnApiPath, HttpCode, HttpMethod} from '@/common/enums';
+import {ApiPath, ColumnApiPath, HttpCode, RouterParam} from '@/common/enums';
 import {handleAsyncApi} from '@/helpers';
 import {column as columnC} from '@/controllers';
 import {
-  checkAuth as checkAuthMiddleware,
+  checkHasPermitBoard,
+  checkHasPermitColumn,
+  checkHasPermitCreateColumn,
   validateSchema as validateSchemaMiddleware,
 } from '@/middlewares';
 import {createColumn as createColumnValidationSchema,
   updateColumn as updateColumnValidationSchema} from "@/validation-schemas";
+import {
+  checkParamsNumberIsValid
+} from "@/middlewares/check-params-number-is-valid/check-params-number-is-valid.middleware";
 
 type Args = {
   apiRouter: Router;
@@ -26,6 +31,12 @@ const initColumnRoute = ({ apiRouter, columnController }: Args): Router => {
    *    get:
    *      tags: [Columns]
    *      summary: get columns by board id
+   *      parameters:
+   *         - in: path
+   *           name: boardId
+   *           type: integer
+   *           required: true
+   *           description: Numeric ID of the board to get.
    *      responses:
    *        200:
    *          description: all columns by board id
@@ -61,7 +72,8 @@ const initColumnRoute = ({ apiRouter, columnController }: Args): Router => {
    */
   columnRouter.get(
     ColumnApiPath.$BOARD_ID,
-    checkAuthMiddleware(HttpMethod.GET),
+    checkParamsNumberIsValid(RouterParam.BOARD_ID),
+    checkHasPermitBoard(RouterParam.BOARD_ID),
     handleAsyncApi(async (req, res) => {
       const result = await columnController.getByBoardId(Number(req.params.boardId));
 
@@ -95,7 +107,7 @@ const initColumnRoute = ({ apiRouter, columnController }: Args): Router => {
    */
   columnRouter.post(
     ColumnApiPath.ROOT,
-    checkAuthMiddleware(HttpMethod.POST),
+    checkHasPermitCreateColumn,
     validateSchemaMiddleware(createColumnValidationSchema),
     handleAsyncApi(async (req, res) => {
       const column = await columnController.create(req.body);
@@ -111,6 +123,12 @@ const initColumnRoute = ({ apiRouter, columnController }: Args): Router => {
    *    patch:
    *      tags: [Columns]
    *      summary: update column
+   *      parameters:
+   *         - in: path
+   *           name: id
+   *           type: integer
+   *           required: true
+   *           description: Numeric ID of the column.
    *      requestBody:
    *        required: true
    *        content:
@@ -143,7 +161,8 @@ const initColumnRoute = ({ apiRouter, columnController }: Args): Router => {
    */
   columnRouter.patch(
     ColumnApiPath.$ID,
-    checkAuthMiddleware(HttpMethod.PATCH),
+    checkParamsNumberIsValid(RouterParam.ID),
+    checkHasPermitColumn(),
     validateSchemaMiddleware(updateColumnValidationSchema),
     handleAsyncApi(async (req, res) => {
       const column = await columnController.update(Number(req.params.id), req.body);
@@ -159,6 +178,12 @@ const initColumnRoute = ({ apiRouter, columnController }: Args): Router => {
    *    delete:
    *      tags: [Columns]
    *      summary: delete column by id
+   *      parameters:
+   *         - in: path
+   *           name: id
+   *           type: integer
+   *           required: true
+   *           description: Numeric ID of the column.
    *      responses:
    *        200:
    *          description: deleted
@@ -186,7 +211,8 @@ const initColumnRoute = ({ apiRouter, columnController }: Args): Router => {
    */
   columnRouter.delete(
     ColumnApiPath.$ID,
-    checkAuthMiddleware(HttpMethod.DELETE),
+    checkParamsNumberIsValid(RouterParam.ID),
+    checkHasPermitColumn(),
     handleAsyncApi(async (req, res) => {
       await columnController.delete(Number(req.params.id));
 

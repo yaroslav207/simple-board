@@ -14,7 +14,7 @@ module.exports = {
           require: true,
         },
         description: {
-          type: Sequelize.STRING,
+          type: Sequelize.TEXT,
         },
         userId: {
           type: Sequelize.INTEGER,
@@ -36,7 +36,7 @@ module.exports = {
     );
   },
 
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.dropTable('boards');
   }
 }
